@@ -17,6 +17,7 @@ Welcome to Stormpath's |language| documentation!
    multitenancy
    idsite
    reference
+   client_api
    configuration
    errors
    changelog
