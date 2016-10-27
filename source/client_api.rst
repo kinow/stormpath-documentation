@@ -152,11 +152,37 @@ Refresh Token
 Logout
 ------
 
+**URL**
+
+https://{DNS-LABEL}.apps.stormpath.io/logout
+
 Password Reset
 --------------
+
+**URL**
+
+https://{DNS-LABEL}.apps.stormpath.io/forgot
+https://{DNS-LABEL}.apps.stormpath.io/change
 
 User Context
 ------------
 
+**URL**
+
+https://{DNS-LABEL}.apps.stormpath.io/me
+
 ID Site
 -------
+
+??
+
+A bit more complicated. The other endpoints redirect to ID Site depending on configuration.
+
+Specifically:
+
+``/login``
+``logout``
+``/register``
+``/forgot``
+
+Presumably ``/change``?
