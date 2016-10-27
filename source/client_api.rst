@@ -169,6 +169,8 @@ Password
 Client Credentials
 """"""""""""""""""
 
+**Request**
+
 .. code-block:: http
 
   POST /oauth/token HTTP/1.1
@@ -182,6 +184,16 @@ Client Credentials
 
   grant_type=client_credentials
 
+**Response**
+
+.. code-block:: json
+
+  {
+    "access_token": "eyJraWQ[...]NRaztg0",
+    "token_type": "Bearer",
+    "expires_in": 3600
+  }
+
 Refresh Token
 """""""""""""
 
@@ -194,7 +206,7 @@ Refresh Token
   Content-Type: application/x-www-form-urlencoded
   Host: smooth-ensign.apps.dev.stormpath.io
 
-  grant_type=refresh_token&refresh_token=eyJraWQiOiIzOTNFT0Q1N0gzRDVES084MUxSQkNLS0IwIiwic3R0IjoicmVmcmVzaCIsImFsZyI6IkhTMjU2In0.eyJqdGkiOiI1ZHNDek5hY3N6NWxjcVpzQkxWcVRrIiwiaWF0IjoxNDc3NjAyNjAxLCJpc3MiOiJodHRwczovL2Rldi5pLnN0b3JtcGF0aC5jb20vdjEvYXBwbGljYXRpb25zLzFJZk9MalhlY0NQeFlEREV4YWoyVXUiLCJzdWIiOiJodHRwczovL2Rldi5pLnN0b3JtcGF0aC5jb20vdjEvYWNjb3VudHMvN2d6SzFSQlVrMnRGM1ZOaFozQVlGSSIsImV4cCI6MTQ4Mjc4NjYwMX0.ZLtEC5dhcdf9Hs9-gtlxk2qb0yrcgsd1BFMQIh-fwns
+  grant_type=refresh_token&refresh_token=eyJraWQ[...]FMQIh-fwns
 
 
 **Response**
