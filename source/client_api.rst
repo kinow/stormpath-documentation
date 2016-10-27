@@ -95,18 +95,37 @@ https://{DNS-LABEL}.apps.stormpath.io/login
 
 .. code-block:: http
 
-  POST /login
+  POST /login HTTP/1.1
   Accept: application/json
   Content-Type: application/json
+  Origin: http://localhost:3000
+  Host: smooth-ensign.apps.dev.stormpath.io
 
   {
-    "login": "foo@bar.com",
-    "password": "myPassword"
+    "login":"jakub@stormpath.com",
+    "password":"Password1!"
   }
 
 **On Success**
 
-Get back the Account
+200 OK along with the Account + an access_token and refresh_token
+
+.. code-block:: json
+
+  {
+    "account": {
+      "href": "https://dev.i.stormpath.com/v1/accounts/7gzK1RBUk2tF3VNhZ3AYFI",
+      "createdAt": "2016-10-26T16:48:14.457Z",
+      "modifiedAt": "2016-10-26T16:48:14.457Z",
+      "username": "jakub",
+      "email": "jakub@stormpath.com",
+      "givenName": "Jakub",
+      "middleName": "",
+      "surname": "Sw",
+      "status": "ENABLED",
+      "fullName": "Jakub Sw"
+    }
+  }
 
 OAuth 2.0
 ^^^^^^^^^
@@ -118,13 +137,30 @@ https://{DNS-LABEL}.apps.stormpath.io/oauth/token
 Password
 """"""""
 
+**Request**
+
 .. code-block:: http
 
-  POST /oauth/token
+  POST /oauth/token HTTP/1.1
+  Accept: application/json
+  Content-Type: application/x-www-form-urlencoded
+  Host: smooth-ensign.apps.dev.stormpath.io
+  Connection: close
+  User-Agent: Paw/3.0.12 (Macintosh; OS X/10.12.1) GCDHTTPRequest
+  Content-Length: 72
 
-  grant_type=password
-  &username=<username>
-  &password=<password>
+  grant_type=password&username=jakub%40stormpath.com&password=Password1%21
+
+**Response**
+
+.. code-block:: json
+
+  {
+    "access_token": "eyJraWQi[...]0dTpiM",
+    "refresh_token": "eyJraWQi[...]okvVI",
+    "token_type": "Bearer",
+    "expires_in": 3600
+  }
 
 .. note::
 
@@ -135,19 +171,42 @@ Client Credentials
 
 .. code-block:: http
 
-  POST /oauth/token
-  Authorization: Basic <base64UrlEncoded(apiKeyId:apiKeySecret)>
+  POST /oauth/token HTTP/1.1
+  Accept: application/json
+  Content-Type: application/x-www-form-urlencoded
+  Authorization: Basic MzZGT1dDWUJBMk1KMVBQWlVZNkE2RkMxNDp6eTY3VFlZMGR2QjdnSnBnR0F5d0k4SWFhQkpSUTZhZ3ZHajZnSWMyeEVV
+  Host: smooth-ensign.apps.dev.stormpath.io
+  Connection: close
+  User-Agent: Paw/3.0.12 (Macintosh; OS X/10.12.1) GCDHTTPRequest
+  Content-Length: 29
 
   grant_type=client_credentials
 
 Refresh Token
 """""""""""""
 
+**Request**
+
 .. code-block:: http
 
-  POST /oauth/token
-  grant_type=refresh_token&
-  refresh_token=<refresh token>
+  POST /oauth/token HTTP/1.1
+  Accept: application/json
+  Content-Type: application/x-www-form-urlencoded
+  Host: smooth-ensign.apps.dev.stormpath.io
+
+  grant_type=refresh_token&refresh_token=eyJraWQiOiIzOTNFT0Q1N0gzRDVES084MUxSQkNLS0IwIiwic3R0IjoicmVmcmVzaCIsImFsZyI6IkhTMjU2In0.eyJqdGkiOiI1ZHNDek5hY3N6NWxjcVpzQkxWcVRrIiwiaWF0IjoxNDc3NjAyNjAxLCJpc3MiOiJodHRwczovL2Rldi5pLnN0b3JtcGF0aC5jb20vdjEvYXBwbGljYXRpb25zLzFJZk9MalhlY0NQeFlEREV4YWoyVXUiLCJzdWIiOiJodHRwczovL2Rldi5pLnN0b3JtcGF0aC5jb20vdjEvYWNjb3VudHMvN2d6SzFSQlVrMnRGM1ZOaFozQVlGSSIsImV4cCI6MTQ4Mjc4NjYwMX0.ZLtEC5dhcdf9Hs9-gtlxk2qb0yrcgsd1BFMQIh-fwns
+
+
+**Response**
+
+.. code-block:: json
+
+  {
+    "access_token": "eyJraWQ[...]urs4iqPY",
+    "refresh_token": "eyJraWQ[...]fwns",
+    "token_type": "Bearer",
+    "expires_in": 3600
+  }
 
 Logout
 ------
@@ -155,6 +214,25 @@ Logout
 **URL**
 
 https://{DNS-LABEL}.apps.stormpath.io/logout
+
+**Request**
+
+.. code-block:: http
+
+  POST /logout HTTP/1.1
+  Host: smooth-ensign.apps.dev.stormpath.io
+  Connection: close
+  Content-Length: 0
+
+**Response**
+
+.. code-block:: none
+
+  HTTP/1.1 200
+  Date: Thu, 27 Oct 2016 20:42:40 GMT
+  Set-Cookie: access_token=;Max-Age=0;path=/;HttpOnly
+  Set-Cookie: refresh_token=;Max-Age=0;path=/;HttpOnly
+  Content-Length: 0
 
 Password Reset
 --------------
@@ -170,6 +248,36 @@ User Context
 **URL**
 
 https://{DNS-LABEL}.apps.stormpath.io/me
+
+**Request**
+
+.. code-block:: http
+
+  GET /me HTTP/1.1
+  Content-Type: application/json; charset=utf-8
+  Cookie: access_token=eyJraW[...]tIUxpdhBJz74LR0dd90RQTnl-u-_hgOOkpA
+  Host: smooth-ensign.apps.dev.stormpath.io
+
+**Response**
+
+.. code-block:: json
+
+  {
+    "account": {
+      "href": "https://dev.i.stormpath.com/v1/accounts/7gzK1RBUk2tF3VNhZ3AYFI",
+      "createdAt": "2016-10-26T16:48:14.457Z",
+      "modifiedAt": "2016-10-26T16:48:14.457Z",
+      "username": "jakub",
+      "email": "jakub@stormpath.com",
+      "givenName": "Jakub",
+      "middleName": "",
+      "surname": "Sw",
+      "status": "ENABLED",
+      "fullName": "Jakub Sw"
+    }
+  }
+
+
 
 ID Site
 -------
