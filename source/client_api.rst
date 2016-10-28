@@ -28,7 +28,7 @@ Overview
 Angular
 -------
 
-For an Angular application, the relevant configuration is found in ``app.js``. add the following line to the ``config`` function:
+For an Angular application, the relevant configuration is found in ``app.js``. Add the following line to the ``config`` function:
 
 ``STORMPATH_CONFIG.ENDPOINT_PREFIX = 'https://{DNS-LABEL}.apps.stormpath.io';``
 
@@ -74,6 +74,37 @@ Account Registration
 
 https://{DNS-LABEL}.apps.stormpath.io/register
 
+**Request**
+
+.. code-block:: http
+
+  POST /register HTTP/1.1
+  Content-Type: application/json; charset=utf-8
+  Host: violet-peace.apps.dev.stormpath.io
+
+  {
+    "email": "jakub@stormpath.com",
+    "password": "Password",
+    "givenName": "Jakub",
+    "surname": "S"
+  }
+
+**Response**
+
+  {
+    "account": {
+      "href": "https://dev.i.stormpath.com/v1/accounts/5kYvdJyROImkrMHVD2fhSG",
+      "createdAt": "2016-10-28T20:40:18.463Z",
+      "modifiedAt": "2016-10-28T20:40:18.463Z",
+      "username": "jakub+test9@stormpath.com",
+      "email": "jakub+test9@stormpath.com",
+      "givenName": "Jakub",
+      "middleName": null,
+      "surname": "S",
+      "status": "ENABLED",
+      "fullName": "Jakub S"
+    }
+  }
 
 
 Email Verification
@@ -82,6 +113,40 @@ Email Verification
 **URL**
 
 https://{DNS-LABEL}.apps.stormpath.io/verify
+
+TRIGGER VERIFICATION EMAIL
+
+**Request**
+
+.. code-block:: http
+
+  POST /verify HTTP/1.1
+  Accept: application/json
+  Content-Type: text/plain; charset=utf-8
+  Host: violet-peace.apps.dev.stormpath.io
+
+  {
+    "email": "jakub@stormpath.com"
+  }
+
+**Response**
+
+200 OK
+
+SEND VERIFICATION TOKEN
+
+**Request**
+
+GET /verify?sptoken=10vphI5BzhVLczsxJKuImq HTTP/1.1
+Accept: application/json
+Host: violet-peace.apps.dev.stormpath.io
+Connection: close
+User-Agent: Paw/3.0.12 (Macintosh; OS X/10.12.1) GCDHTTPRequest
+
+**Response**
+
+200 OK
+
 
 Authentication
 --------------
@@ -249,10 +314,56 @@ https://{DNS-LABEL}.apps.stormpath.io/logout
 Password Reset
 --------------
 
+FORGOT
+
+To trigger the password reset email
+
 **URL**
 
 https://{DNS-LABEL}.apps.stormpath.io/forgot
+
+**Request**
+
+.. code-block:: http
+
+  POST /forgot HTTP/1.1
+  Accept: application/json
+  Content-Type: text/plain; charset=utf-8
+  Host: violet-peace.apps.dev.stormpath.io
+
+  {
+    "email": "jakub@stormpath.com"
+  }
+
+**Response**
+
+HTTP/1.1 200
+
+CHANGE
+
+To actually change the password. This is the endpoint that a user will use if they have received a password reset email and have clicked on the link in the email. The link will point to this endpoint, and contain the sptoken query parameter.
+
+**URL**
+
 https://{DNS-LABEL}.apps.stormpath.io/change
+
+**Request**
+
+.. code-block::
+
+  POST /change HTTP/1.1
+  Accept: application/json
+  Content-Type: text/plain; charset=utf-8
+  Host: violet-peace.apps.dev.stormpath.io
+
+  {
+    "sptoken": "eyJ0aWQiOiIyWnU4ekw2ZndvMjdUVEtBeGp0dmVtIiwic3R0IjoiYXNzZXJ0aW9uIiwiYWxnIjoiSFMyNTYifQ%2EeyJleHAiOjE0Nzc3NzUzNjIsImp0aSI6IjZFMWo0aTN4QkdPV1g2OXhrVDNSRG8ifQ%2ECOmIVRr3pQ4jsIhKl7wWjHkYTfX1Reg3BV0kAlMSQpc",
+    "password": "Password1!"
+  }
+
+**Response**
+
+HTTP/1.1 200
 
 User Context
 ------------
