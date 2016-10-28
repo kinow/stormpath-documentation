@@ -91,6 +91,8 @@ https://{DNS-LABEL}.apps.stormpath.io/register
 
 **Response**
 
+.. code-block:: json
+
   {
     "account": {
       "href": "https://dev.i.stormpath.com/v1/accounts/5kYvdJyROImkrMHVD2fhSG",
@@ -349,7 +351,7 @@ https://{DNS-LABEL}.apps.stormpath.io/change
 
 **Request**
 
-.. code-block::
+.. code-block:: http
 
   POST /change HTTP/1.1
   Accept: application/json
