@@ -1,23 +1,51 @@
-********************
-Using the Client API
-********************
+************************
+8? Using the Client API
+************************
 
 What is the Client API?
 =======================
 
-Overview
---------
+Client-side authentication is intended for developers of Single Page Applications (SPAs) and mobile applications who are either using a serverless architecture, or do not want to implement Stormpath on their backend application servers.
+
+
+
+Since these client applications are not able to securely store API Keys, the Client API endpoints allow for basic user registration and management tasks to be performed without requiring any authentication. This means that your client applications can use these endpoints in order to, for example,  authenticate a user and get back a session. With this session in hand, the client application can then continue on with its own functionality, or securely communicate with a back-end application server.
 
 Why should I use the Client API?
 --------------------------------
 
-Client-side authentication is intended for developers of Single Page Applications (SPAs) and mobile applications. It allows those applications to communicate directly with Stormpath in order to register and authenticate their users. As a developer, this allows you to ensure that only authenticated client requests are accepted by your server.
+Scenario 1: A serverless client application...
+
+This is relatively straightforward
+
+Scenario 2: A serverful client application...
+
+This isn't.
 
 How does the Client API Work?
 =============================
 
+The Client API exposes a configurable set of endpoints to your applications. Using these endpoints, the applications can:
+
+- Authenticate an existing user and get back either their Account information or OAuth 2.0 tokens
+- Retrieve the current user's Account information
+- Log out an already authenticated user
+- Register a new user
+- Trigger the email verification workflow, as well as send a verification of that email
+- Trigger the password reset email, as well as send an updated password
+- ID Site??
+
+Since all of these endpoints do not require an API Key, you do not have to worry about storing one on your client application, or having to inject one via a proxy server. Additionally, these endpoints allow your client applications to use Stormpath's entire identity management system without having to add any Stormpath code to your application backend.
+
+An example user flow could look as follows:
+
+1. The user lands on the login page for your Angular application
+2.
+
 Configuring the Client API
 ==========================
+
+The recommended way to configure the behavior of your Application's Client API is via the Stormpath Admin Console.
 
 Using the Client API from a Stormpath Client SDK
 ================================================
@@ -72,7 +100,7 @@ Account Registration
 
 **URL**
 
-https://{DNS-LABEL}.apps.stormpath.io/register
+``https://{DNS-LABEL}.apps.stormpath.io/register``
 
 **Request**
 
@@ -114,7 +142,7 @@ Email Verification
 
 **URL**
 
-https://{DNS-LABEL}.apps.stormpath.io/verify
+``https://{DNS-LABEL}.apps.stormpath.io/verify``
 
 TRIGGER VERIFICATION EMAIL
 
@@ -142,8 +170,6 @@ SEND VERIFICATION TOKEN
 GET /verify?sptoken=10vphI5BzhVLczsxJKuImq HTTP/1.1
 Accept: application/json
 Host: violet-peace.apps.dev.stormpath.io
-Connection: close
-User-Agent: Paw/3.0.12 (Macintosh; OS X/10.12.1) GCDHTTPRequest
 
 **Response**
 
@@ -158,14 +184,13 @@ Login
 
 **URL**
 
-https://{DNS-LABEL}.apps.stormpath.io/login
+``https://{DNS-LABEL}.apps.stormpath.io/login``
 
 .. code-block:: http
 
   POST /login HTTP/1.1
   Accept: application/json
   Content-Type: application/json
-  Origin: http://localhost:3000
   Host: smooth-ensign.apps.dev.stormpath.io
 
   {
@@ -199,7 +224,7 @@ OAuth 2.0
 
 **URL**
 
-https://{DNS-LABEL}.apps.stormpath.io/oauth/token
+``https://{DNS-LABEL}.apps.stormpath.io/oauth/token``
 
 Password
 """"""""
@@ -212,9 +237,6 @@ Password
   Accept: application/json
   Content-Type: application/x-www-form-urlencoded
   Host: smooth-ensign.apps.dev.stormpath.io
-  Connection: close
-  User-Agent: Paw/3.0.12 (Macintosh; OS X/10.12.1) GCDHTTPRequest
-  Content-Length: 72
 
   grant_type=password&username=jakub%40stormpath.com&password=Password1%21
 
@@ -243,11 +265,8 @@ Client Credentials
   POST /oauth/token HTTP/1.1
   Accept: application/json
   Content-Type: application/x-www-form-urlencoded
-  Authorization: Basic MzZGT1dDWUJBMk1KMVBQWlVZNkE2RkMxNDp6eTY3VFlZMGR2QjdnSnBnR0F5d0k4SWFhQkpSUTZhZ3ZHajZnSWMyeEVV
+  Authorization: Basic MzZGT1dDWUJBMk1KMVBQWlVZ[...]4SWFhQkpSUTZhZ3ZHajZnSWMyeEVV
   Host: smooth-ensign.apps.dev.stormpath.io
-  Connection: close
-  User-Agent: Paw/3.0.12 (Macintosh; OS X/10.12.1) GCDHTTPRequest
-  Content-Length: 29
 
   grant_type=client_credentials
 
@@ -292,7 +311,7 @@ Logout
 
 **URL**
 
-https://{DNS-LABEL}.apps.stormpath.io/logout
+``https://{DNS-LABEL}.apps.stormpath.io/logout``
 
 **Request**
 
@@ -300,29 +319,21 @@ https://{DNS-LABEL}.apps.stormpath.io/logout
 
   POST /logout HTTP/1.1
   Host: smooth-ensign.apps.dev.stormpath.io
-  Connection: close
-  Content-Length: 0
 
 **Response**
 
-.. code-block:: none
-
-  HTTP/1.1 200
-  Date: Thu, 27 Oct 2016 20:42:40 GMT
-  Set-Cookie: access_token=;Max-Age=0;path=/;HttpOnly
-  Set-Cookie: refresh_token=;Max-Age=0;path=/;HttpOnly
-  Content-Length: 0
+HTTP/1.1 200
 
 Password Reset
 --------------
 
 FORGOT
 
-To trigger the password reset email
+Used to trigger the password reset email
 
 **URL**
 
-https://{DNS-LABEL}.apps.stormpath.io/forgot
+``https://{DNS-LABEL}.apps.stormpath.io/forgot``
 
 **Request**
 
@@ -330,7 +341,7 @@ https://{DNS-LABEL}.apps.stormpath.io/forgot
 
   POST /forgot HTTP/1.1
   Accept: application/json
-  Content-Type: text/plain; charset=utf-8
+  Content-Type: application/json; charset=utf-8
   Host: violet-peace.apps.dev.stormpath.io
 
   {
@@ -347,7 +358,7 @@ To actually change the password. This is the endpoint that a user will use if th
 
 **URL**
 
-https://{DNS-LABEL}.apps.stormpath.io/change
+``https://{DNS-LABEL}.apps.stormpath.io/change``
 
 **Request**
 
@@ -355,7 +366,7 @@ https://{DNS-LABEL}.apps.stormpath.io/change
 
   POST /change HTTP/1.1
   Accept: application/json
-  Content-Type: text/plain; charset=utf-8
+  Content-Type: application/json; charset=utf-8
   Host: violet-peace.apps.dev.stormpath.io
 
   {
@@ -372,7 +383,7 @@ User Context
 
 **URL**
 
-https://{DNS-LABEL}.apps.stormpath.io/me
+``https://{DNS-LABEL}.apps.stormpath.io/me``
 
 **Request**
 
@@ -402,7 +413,31 @@ https://{DNS-LABEL}.apps.stormpath.io/me
     }
   }
 
+By default this call will return:
 
+- ``href``
+- ``createdAt``
+- ``modifiedAt``
+- ``username``
+- ``email``
+- ``givenName``
+- ``middleName``
+- ``surname``
+- ``status``
+- ``fullName``
+
+What else returns is configurable.
+
+You can also get back the Accounts expanded:
+
+- API Keys
+- Applications
+- Custom Data
+- Group Memberships
+- Groups
+- Provider Data
+- Directory
+- Tenant
 
 ID Site
 -------
@@ -414,8 +449,9 @@ A bit more complicated. The other endpoints redirect to ID Site depending on con
 Specifically:
 
 ``/login``
-``logout``
+``/logout``
 ``/register``
 ``/forgot``
-
 Presumably ``/change``?
+
+All redirect you to ID Site.

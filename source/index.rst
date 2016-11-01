@@ -16,8 +16,8 @@ Welcome to Stormpath's |language| documentation!
    auth_z
    multitenancy
    idsite
-   reference
    client_api
+   reference
    configuration
    errors
    changelog
