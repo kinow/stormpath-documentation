@@ -638,9 +638,9 @@ Configuring Token-Based Authentication
 
 Stormpath is configurable so you can set the time to live (TTL) for both the Access and Refresh tokens. This is important for many applications because it gives the ability to define how the tokens expire. For example, you could decide that your application requires a user to log in daily, but the access should only live for 10 minutes. Or, you could decide that for your application, users should be able to stay logged-in for two months and the access token expires in an hour.
 
-Each Application resource in Stormpath has an associated :ref:`OAuth Policy resource <ref-oauth-policy>` where the TTLs for a particular Application's tokens are stored:
-
 .. only:: rest
+
+  Each Application resource in Stormpath has an associated `OAuth Policy resource <ref-oauth-policy>`__ where the TTLs for a particular Application's tokens are stored:
 
   .. code-block:: json
 
@@ -650,6 +650,10 @@ Each Application resource in Stormpath has an associated :ref:`OAuth Policy reso
         "refreshTokenTtl": "P60D",
         "comment":" // This JSON has been truncated for readability"
     }
+
+.. only:: not rest
+
+  Each Application resource in Stormpath has an associated OAuth Policy where the TTLs for a particular Application's tokens are stored:
 
 .. only:: csharp or vbnet
 
@@ -4084,7 +4088,7 @@ The multi-factor authentication process works as follows with text messages:
 With Google Authenticator, the flow is only slightly different:
 
 #. An additional **Factor** of type ``google-authenticator`` is added to an Account.
-#. The new **Factor** has a **secret** and a Base64-encoded **QR code**, both of which can be used to add it to the Google Authenticator app.
+#. The new **Factor** has a **secret** and a Base64-encoded **QR code**, both of which can be used to add it to the Google Authenticator (or `similar <https://www.authy.com/tutorials/how-use-authy-google-authenticator/>`__) app.
 #. At any time, you can send the **code** from the Authenticator app to Stormpath's ``/challenges`` endpoint, at which point you will get back either a ``SUCCESS`` or ``FAILED`` response.
 
 .. note::
@@ -4366,7 +4370,12 @@ To add an additional Google Authenticator Factor to this Account, you must send 
     {
       "type":"google-authenticator",
       "accountName": "jakub@stormpath.com"
+      "issuer": "Example App"
     }
+
+.. note::
+
+  Although the ``issuer`` field is not required, it is recommended because it will make a name show up under the code in the Google Authenticator (or `similar <https://www.authy.com/tutorials/how-use-authy-google-authenticator/>`__) app.
 
 .. only:: java
 
@@ -4517,11 +4526,11 @@ You can now take this string and turn it into a QR Code image:
 - You could use a QR Code Library, such as `QRCode.js <https://davidshimjs.github.io/qrcodejs/>`__
 - Or you could generate the image yourself, using an ``<img>`` tag or CSS. For examples of both, see `here <https://css-tricks.com/examples/DataURIs/>`__.
 
-.. todo::
-
-  Not sure if this text above applies for the SDKs?
-
 Once the image is generated, the user will scan it into their Authenticator app. If you ask them for a code, they will go into the app and find the code for your application. For information about what happens with this code, see :ref:`below <mfa-challenge-after-google>`.
+
+.. note::
+
+  Many authenticator apps are compatible with Google Authenticator QR codes. Apps we like include `Authy <https://www.authy.com/app/>`__ and `Duo Mobile <https://duo.com/solutions/features/two-factor-authentication-methods/duo-mobile>`__.
 
 .. _mfa-challenge:
 
